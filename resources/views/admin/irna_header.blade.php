@@ -8,18 +8,18 @@
         <meta name="author" content="" />
         <title>Palms Hotel</title>
         <link rel="icon" href="{{asset('images/logo.png')}}">
-        <link href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css" rel="stylesheet" />
+        <link href="{{asset('asset_admin/source_offline/dataTables.min.css')}}" rel="stylesheet" />
         <link href="{{asset('asset_admin/css/styles.css')}}" rel="stylesheet" />
-        <script src="//cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js" crossorigin="anonymous"></script>
-        <script src="//cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+        <script src="{{asset('asset_admin/source_offline/all.min.js')}}" crossorigin="anonymous"></script>
+        <script src="{{asset('asset_admin/source_offline/bootstrap.bundle.min.js')}}" crossorigin="anonymous"></script>
         <script src="{{asset('asset_admin/js/scripts.js')}}"></script>
-        <script src="//cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-        <script src="//cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-        <script src="//cdn.datatables.net/1.11.3/js/jquery.dataTables.min.js"></script>
-        <link href="//cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+        <script src="{{asset('asset_admin/source_offline/Chart.min.js')}}" crossorigin="anonymous"></script>
+        <script src="{{asset('asset_admin/source_offline/simple-datatables.js')}}" crossorigin="anonymous"></script>
+        <script src="{{asset('asset_admin/source_offline/jquery.min.js')}}"></script>
+        <script src="{{asset('asset_admin/source_offline/jquery.dataTables.min.js')}}"></script>
+        <link href="{{asset('asset_admin/source_offline/select2.min.css')}}" rel="stylesheet" />
         <link href="{{asset('asset_admin/css/tagsinput.css')}}" rel="stylesheet"/>
-        <script src="//cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+        <script src="{{asset('asset_admin/source_offline/select2.min.js')}}"></script>
     </head>
     <style type="text/css">
         .bootstrap-tagsinput .tag {

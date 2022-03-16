@@ -10,8 +10,8 @@
 </div>
 </div>
 </body>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.0/js/bootstrap.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-tagsinput/0.8.0/bootstrap-tagsinput.min.js"></script>
+<script src="{{asset('asset_admin/source_offline/bootstrap.min.js')}}"></script>
+<script src="{{asset('asset_admin/source_offline/bootstrap-tagsinput.min.js')}}"></script>
 <script>
     $(".overlay").addClass('show')
     function load() {
