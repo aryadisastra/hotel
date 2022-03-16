@@ -26,23 +26,28 @@ Route::get('/pengguna','IrnaPenggunaController@index');
 Route::post('/pengguna','IrnaPenggunaController@add');
 Route::get('/pengguna/{id}','IrnaPenggunaController@detail');
 Route::put('/pengguna','IrnaPenggunaController@update');
+Route::put('/pengguna','IrnaPenggunaController@delete');
 
 Route::get('/role','IrnaRoleController@index');
 Route::post('/role','IrnaRoleController@add');
 Route::get('/role/{id}','IrnaRoleController@detail');
 Route::put('/role','IrnaRoleController@update');
+Route::put('/role','IrnaRoleController@delete');
 
 Route::get('/fasilitas','IrnaFasilitasController@index');
 Route::post('/fasilitas','IrnaFasilitasController@add');
 Route::get('/fasilitas/{id}','IrnaFasilitasController@detail');
 Route::put('/fasilitas','IrnaFasilitasController@update');
+Route::put('/fasilitas','IrnaFasilitasController@delete');
 
 Route::get('/tipe','IrnaTipeController@index');
 Route::post('/tipe','IrnaTipeController@add');
 Route::get('/tipe/{id}','IrnaTipeController@detail');
 Route::put('/tipe','IrnaTipeController@update');
+Route::put('/tipe','IrnaTipeController@delete');
 
 Route::get('/kamar','IrnaKamarController@index');
 Route::post('/kamar','IrnaKamarController@add');
 Route::get('/kamar/{id}','IrnaKamarController@detail');
 Route::put('/kamar','IrnaKamarController@update');
+Route::put('/kamar','IrnaKamarController@delete');

@@ -54,4 +54,11 @@ class IrnaFasilitasController extends Controller
 
         return response()->json($update == 1 ? True : False);
     }
+
+    public function delete(Request $r)
+    {
+        if(!session('user')) return view('admin.login');
+        $delete = IrnaFasilitas::where('id',$r->id)->delete();
+        return response()->json($delete);
+    }
 }

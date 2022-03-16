@@ -220,5 +220,42 @@
             }
         })
     }
+
+    const deleteUser = (id) => {
+        $(".overlay").addClass('show')
+        
+        const data = {
+            _token: "{{ csrf_token() }}",
+            id: id,
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '/fasilitas',
+            data: data,
+            success: (res) => {
+                $(".overlay").removeClass('show')
+
+                if(res == true) {
+                    location.reload()
+
+                    return
+                }
+                
+                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
+
+                return
+            },
+            error: (jqXHR, textStatus, error) => {
+                $(".overlay").removeClass('show')
+
+                alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
+
+                return
+            }
+        })
+    }
+
+
 </script>
 @include('admin.irna_footer')
