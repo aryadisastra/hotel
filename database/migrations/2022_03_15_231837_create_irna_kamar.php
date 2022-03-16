@@ -22,7 +22,7 @@ return new class extends Migration
             $table->integer('irna_harga');
             $table->integer('irna_status');
             $table->text('irna_fasilitas');
-            $table->text('irna_foto');
+            $table->text('irna_foto')->nullable(true);
             $table->timestamps();
         });
     }
