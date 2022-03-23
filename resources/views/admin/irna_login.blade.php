@@ -4,7 +4,7 @@
         <link rel="stylesheet" href="//cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css">
         <link rel="stylesheet" href="//use.fontawesome.com/releases/v5.7.2/css/all.css">
         <!-- <link rel="stylesheet" href="{{asset('css/login.css')}}"> -->
-        <script src="//ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{{asset('asset_admin/source_offline/jquery.min.js')}}"></script>
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <link rel="icon" href="{{asset('images/logo.png')}}">
     </head>

@@ -55,7 +55,12 @@ class IrnaKamarController extends Controller
         if(!session('user')) return view('admin.login');
             
         $detail = IrnaKamar::where('id',$id)->first();
-        return response()->json($detail);
+        $fasilitas = IrnaFasilitas::where('irna_status',1)->get();
+        $data = [
+            'detail'    => $detail,
+            'fasilitas' => $fasilitas
+        ];
+        return response()->json($data);
         
         
     }

@@ -59,7 +59,7 @@
             <div class="modal-body">
                 <form id="form-Role">
                     <div class="form-group row mb-2">
-                        <label class="col-3 col-form-label">Nama Role</label>
+                        <label class="col-3 col-form-label">Fasilitas</label>
                         <div class="col-9">
                             <input type="text" class="form-control" id="addNama" data-role="tagsinput">
                         </div>

@@ -46,7 +46,7 @@
                                     <td>{{$dt->irna_maximal}} Orang</td>
                                     <td>{{$dt->irna_status == 1 ? 'Kosong' : 'Diisi'}}</td>
                                     <td>
-                                        <button  type="button" class="btn btn-info btn-sm form-modal" onclick="detailUser('{{ $dt->id }}')"><i class="fa fa-file-text fa-fw"></i></button>
+                                        <button  type="button" class="btn btn-info btn-sm form-modal" onclick="detailKamar('{{ $dt->id }}')"><i class="fa fa-file-text fa-fw"></i></button>
                                         <button  type="button" class="btn btn-danger btn-sm form-modal" onclick="deleteUser('{{ $dt->id }}')"><i class="fa fa-trash fa-fw"></i></button>
                                     </td>
                                 </tr>
@@ -128,7 +128,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" onclick="addUser()">Simpan</button>
+                <button type="button" class="btn btn-primary" onclick="addKamar()">Simpan</button>
             </div>
             </div>
         </div>
@@ -145,32 +145,54 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-Role">
+                <form id="form-edit" enctype="multipart/form-data" action="/kamar" method="PUT">
+                    @csrf
                     <div class="form-group row mb-2">
-                        <label class="col-3 col-form-label">Nama Role</label>
+                        <label class="col-3 col-form-label">Nomor Kamar</label>
                         <div class="col-9">
                             <input type="hidden" class="form-control" id="editId">
-                            <input type="text" class="form-control" id="editNama">
+                            <input type="text" class="form-control" id="editNomor">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
-                        <label class="col-3 col-form-label">Status</label>
+                        <label class="col-3 col-form-label">Lantai</label>
                         <div class="col-9">
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="editStatus" id="editStatusAktif" value="1">
-                                <label class="form-check-label" for="editStatusAktif">Aktif</label>
-                              </div>
-                              <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" name="editStatus" id="editStatusNonAktif" value="2">
-                                <label class="form-check-label" for="editStatusNonAktif">Non-Aktif</label>
-                            </div>
+                            <input type="text" class="form-control" id="editLantai">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Tipe</label>
+                        <div class="col-9">
+                            <select class="form-control" name="tipe"  id="editTipe">
+                                <option value="0">Silahkan Pilih Tipe</option>
+                                @foreach($dataTipe as $dt)
+                                    <option value="{{$dt->id}}">{{$dt->irna_nama}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Kapasitas</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" name="kapasitas" id="editKapasitas">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Fasilitas</label>
+                        <div class="col-9" id="container-fasilitas">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Harga</label>
+                        <div class="col-9">
+                            <input type="text" class="form-control" name="harga" id="editHarga">
                         </div>
                     </div>
                 </form>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
-                <button type="button" class="btn btn-primary" onclick="editUser()">Ubah</button>
+                <button type="button" class="btn btn-primary" onclick="editKamar()">Ubah</button>
             </div>
             </div>
         </div>
@@ -178,26 +200,43 @@
 </main>
 
 <script>
-    const addUser = () => {
+    const addKamar = () => {
         
         $(".overlay").addClass('show')
         $('#form-Kamar').submit()
     }
 
+    $("#editModal").on('hide.bs.modal', function(){
+	    $('#container-fasilitas').html('');
+    });
+
     
-    const detailUser = (id) => {
+    const detailKamar = (id) => {
         $(".overlay").addClass('show')
         $.ajax({
             type: 'GET',
-            url: '/role/'+id,
+            url: '/kamar/'+id,
             success: function(res) {
                 
                 $(".overlay").removeClass('show')
                 if(res != null || res != undefined) {
-                    $('#editId').val(res.id)
-                    $('#editNama').val(res.irna_nama)
-                    if(res.irna_status == 1) $('#editStatusAktif').prop('checked',true)
-                    if(res.irna_status == 2) $('#editStatusNonAktif').prop('checked',true)
+                    $('#editId').val(res.detail.id)
+                    $('#editNomor').val(res.detail.irna_nomor)
+                    $('#editLantai').val(res.detail.irna_lantai)
+                    $('#editTipe').val(res.detail.irna_tipe)
+                    $('#editKapasitas').val(res.detail.irna_maximal)
+                    $('#editHarga').val(res.detail.irna_harga)
+                    $.each(res.fasilitas,function(key,data){
+                        let result = res.detail.irna_fasilitas.includes(data.id) ? "checked" : ""
+                        console.log(result);
+                        $('#container-fasilitas').append('<div class="form-check">'+
+                            '<input class="form-check-input" type="checkbox" name="fasilitas[]" value="'+data.irna_id+'" id="defaultCheck'+data.irna_id+'" '+result+'>'+
+                            '<label class="form-check-label" for="defaultCheck'+data.irna_id+'">'+
+                                ''+data.irna_nama+
+                            '</label>'+
+                        '</div>')
+                    })
+
                     $("#editModal").modal('show');
 
                     return;
@@ -216,41 +255,10 @@
         });
     }
 
-    const editUser = () => {
+    const editKamar = () => {
         $(".overlay").addClass('show')
+        $("#form-edit").submit()
         
-        const data = {
-            _token: "{{ csrf_token() }}",
-            id: $('#editId').val(),
-            nama: $('#editNama').val(),
-            status: $('#editStatusAktif').is(':checked') ? 1 : 2,
-        }
-
-        $.ajax({
-            type: 'PUT',
-            url: '/role',
-            data: data,
-            success: (res) => {
-                $(".overlay").removeClass('show')
-
-                if(res == true) {
-                    location.reload()
-
-                    return
-                }
-                
-                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
-
-                return
-            },
-            error: (jqXHR, textStatus, error) => {
-                $(".overlay").removeClass('show')
-
-                alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
-
-                return
-            }
-        })
     }
 
     const deleteUser = (id) => {

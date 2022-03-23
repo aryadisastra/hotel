@@ -5,9 +5,9 @@
     <img src="images/photos/banner.jpg"  class="img-responsive" alt="slide">
     <div class="welcome-message">
         <div class="wrap-info">
-            <div class="information">
-                <h1  class="animated fadeInDown">Best hotel in Dubai</h1>
-                <p class="animated fadeInUp">Most luxurious hotel of asia with the royal treatments and excellent customer service.</p>                
+            <div class="information" style="opacity: 0.6">
+                <h1  class="animated fadeInDown" style="color: black">Hotel Terbaik Di Cimahi</h1>
+                <p class="animated fadeInUp" style="background-color : black ">Hotel Ter-Mewah Di Jawa Barat Dengan Kualitas Yang Bagus Dan Pelayanan Yang Baik</p>                
             </div>
             <a href="#information" class="arrow-nav scroll wowload fadeInDownBig"><i class="fa fa-angle-down"></i></a>
         </div>
@@ -21,7 +21,7 @@
 <div class="container">
 <div class="row">
 <div class="col-sm-7 col-md-8">
-    <div class="embed-responsive embed-responsive-16by9 wowload fadeInLeft"><iframe  class="embed-responsive-item" src="//player.vimeo.com/video/55057393?title=0" width="100%" height="400" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></iframe></div>
+    <div class="embed-responsive embed-responsive-16by9 wowload fadeInLeft"><img  class="embed-responsive-item" src="images/photos/kolam.jpg" width="50" height="50" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></img></div>
 </div>
 <div class="col-sm-5 col-md-4">
 <h3>Reservation</h3>
