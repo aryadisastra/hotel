@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\IrnaGuest;
+use App\Models\IrnaKamar;
+use App\Models\IrnaReservasi;
 use App\Models\IrnaRole;
+use App\Models\IrnaTipe;
 use App\Models\IrnaUser;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class IrnaLoginController extends Controller
 {
@@ -22,27 +27,50 @@ class IrnaLoginController extends Controller
                 'system'    =>  $dt->system_user
             ];
         }
-        return view('admin.irna_dashboard',compact('fetch'));
+
+        $dataSummary = [];
+        $dataReservasi = IrnaReservasi::all();
+        if(count($dataReservasi) > 0){
+            foreach($dataReservasi as $dt) { 
+                $Tamu      = IrnaGuest::where('id',$dt->irna_id_tamu)->first(); 
+                $Kamar     = IrnaKamar::where('irna_nomor',$dt->irna_no_kamar)->first();
+                $Tipe      = IrnaTipe::where('id',$Kamar->irna_tipe)->first();
+
+                $dataSummary[]  = [
+                    'id'         => $dt->id,
+                    'kode'       => $dt->irna_kode,
+                    'nama'       => $Tamu->irna_nama,
+                    'identitas'  => $Tamu->irna_no_identitas,
+                    'telp'       => $Tamu->irna_telpon,
+                    'checkin'    => $dt->irna_checkin,
+                    'checkout'   => $dt->irna_checkout,
+                    'no_kamar'   => $dt->irna_no_kamar,
+                    'tipe'       => $Tipe->irna_nama,
+                    'total'      => $dt->irna_total,
+                ];
+            }
+        }
+        return view('admin.irna_dashboard',compact('fetch','dataSummary'));
     }
 
     public function getData()
     {
-        // $fetch = [];
-        // $data1 = DataLab::select(DB::raw('COUNT(*) as total'))->first();
-        // $data2 = DataLab::select(DB::raw('COUNT(*) as belum'))->where('status',1)->first();
-        // $data3 = DataLab::select(DB::raw('COUNT(*) as menunggu'))->where('status',2)->first();
-        // $data4 = DataLab::select(DB::raw('COUNT(*) as selesai'))->where('status',3)->first();
-        // $total = $data1->total;
-        // $belum = $data2->belum;
-        // $menunggu = $data3->menunggu;
-        // $selesai = $data4->selesai;
-        // $fetch[] = [
-        //     'total'     => $total,
-        //     'belum'     => $belum,
-        //     'menunggu'  => $menunggu,
-        //     'selesai'   => $selesai,
-        // ];
-        // return response()->json($fetch);
+        $fetch = [];
+        $data1 = IrnaReservasi::select(DB::raw('COUNT(*) as total_hari_ini'))->where(DB::raw('DATE(created_at)'),'=',DB::raw('DATE(now())'))->first();
+        $data2 = IrnaKamar::select(DB::raw('COUNT(*) as kamar_dipakai'))->where('irna_status',2)->first();
+        $data3 = IrnaKamar::select(DB::raw('COUNT(*) as kamar_kosong'))->where('irna_status',1)->first();
+        $data4 = IrnaReservasi::select(DB::raw('COUNT(*) as keluar'))->where(DB::raw('DATE(irna_checkout)'),'=',DB::raw('DATE(now())'))->first();
+        $total_hari_ini = $data1->total_hari_ini;
+        $kamar_dipakai = $data2->kamar_dipakai;
+        $kamar_kosong = $data3->kamar_kosong;
+        $keluar= $data4->keluar;
+        $fetch[] = [
+            'total_hari_ini'     => $total_hari_ini,
+            'kamar_dipakai'     => $kamar_dipakai,
+            'kamar_kosong'  => $kamar_kosong,
+            'keluar'   => $keluar,
+        ];
+        return response()->json($fetch);
     }
 
     public function login(Request $r)

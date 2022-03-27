@@ -1,12 +1,12 @@
 @include('homepage.irna_header')
-
+{{isset($action) ? $action : $action = ''}}
 <!-- banner -->
 <div class="banner">    	   
     <img src="images/photos/banner.jpg"  class="img-responsive" alt="slide">
     <div class="welcome-message">
         <div class="wrap-info">
             <div class="information" style="opacity: 0.6">
-                <h1  class="animated fadeInDown" style="color: black">Hotel Terbaik Di Cimahi</h1>
+                <h1  class="animated fadeInDown">Hotel Terbaik Di Bandung</h1>
                 <p class="animated fadeInUp" style="background-color : black ">Hotel Ter-Mewah Di Jawa Barat Dengan Kualitas Yang Bagus Dan Pelayanan Yang Baik</p>                
             </div>
             <a href="#information" class="arrow-nav scroll wowload fadeInDownBig"><i class="fa fa-angle-down"></i></a>
@@ -24,102 +24,103 @@
     <div class="embed-responsive embed-responsive-16by9 wowload fadeInLeft"><img  class="embed-responsive-item" src="images/photos/kolam.jpg" width="50" height="50" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></img></div>
 </div>
 <div class="col-sm-5 col-md-4">
-<h3>Reservation</h3>
-    <form role="form" class="wowload fadeInRight">
+    @if(session('guest'))
+    <h3>Pemesanan</h3>
+    <form role="form" action="/homepage/reservasi" method="POST" class="wowload fadeInRight">
+        @csrf
         <div class="form-group">
-            <input type="text" class="form-control"  placeholder="Name">
+            <input type="text" class="form-control" value="{{session('guest')['nama']}}" readonly>
         </div>
         <div class="form-group">
-            <input type="email" class="form-control"  placeholder="Email">
+            <input type="email" class="form-control"  value="{{session('guest')['email']}}" readonly>
         </div>
         <div class="form-group">
-            <input type="Phone" class="form-control"  placeholder="Phone">
-        </div>        
-        <div class="form-group">
-            <div class="row">
-            <div class="col-xs-6">
-            <select class="form-control">
-              <option>No. of Rooms</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-            </div>        
-            <div class="col-xs-6">
-            <select class="form-control">
-              <option>No. of Adult</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
-            </select>
-            </div></div>
+            <input type="Phone" class="form-control"  value="{{session('guest')['telpon']}}" readonly>
         </div>
         <div class="form-group">
             <div class="row">
-            <div class="col-xs-4">
-              <select class="form-control col-sm-2" name="expiry-month" id="expiry-month">
-                <option>Date</option>
-                <option value="01">1</option>
-                <option value="02">2</option>
-                <option value="03">Mar (03)</option>
-                <option value="04">Apr (04)</option>
-                <option value="05">May (05)</option>
-                <option value="06">June (06)</option>
-                <option value="07">July (07)</option>
-                <option value="08">Aug (08)</option>
-                <option value="09">Sep (09)</option>
-                <option value="10">Oct (10)</option>
-                <option value="11">Nov (11)</option>
-                <option value="12">Dec (12)</option>
-              </select>
+                <div class="col-xs-4">
+                    <label for="tipe">Tipe : </label>
+                    <select class="form-control col-sm-2" name="tipe" id="tipe">
+                        <option>Tipe</option>
+                        @foreach ($tipe as $dt)
+                          <option value="{{$dt->id}}">{{$dt->irna_nama}}</option>  
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-xs-4">
+                    <label for="nomor">Nomor : </label>
+                    <select class="form-control col-sm-2" name="nomor" id="nomor">
+                        <option>Nomor</option>
+                    </select>
+                </div>
+                <div class="col-xs-4">
+                    <label for="kapasitas">Kapasitas : </label>
+                    <input type="text" class="form-control" name="kapasitas" id="kapasitas"  value="Kapasitas :" readonly>
+                </div>
             </div>
-            <div class="col-xs-4">
-              <select class="form-control col-sm-2" name="expiry-month" id="expiry-month">
-                <option>Month</option>
-                <option value="01">Jan (01)</option>
-                <option value="02">Feb (02)</option>
-                <option value="03">Mar (03)</option>
-                <option value="04">Apr (04)</option>
-                <option value="05">May (05)</option>
-                <option value="06">June (06)</option>
-                <option value="07">July (07)</option>
-                <option value="08">Aug (08)</option>
-                <option value="09">Sep (09)</option>
-                <option value="10">Oct (10)</option>
-                <option value="11">Nov (11)</option>
-                <option value="12">Dec (12)</option>
-              </select>
-            </div>
-            <div class="col-xs-4">
-              <select class="form-control" name="expiry-year">
-                <option value="13">2013</option>
-                <option value="14">2014</option>
-                <option value="15">2015</option>
-                <option value="16">2016</option>
-                <option value="17">2017</option>
-                <option value="18">2018</option>
-                <option value="19">2019</option>
-                <option value="20">2020</option>
-                <option value="21">2021</option>
-                <option value="22">2022</option>
-                <option value="23">2023</option>
-              </select>
-            </div>
-          </div>
         </div>
         <div class="form-group">
-            <textarea class="form-control"  placeholder="Message" rows="4"></textarea>
+            <label for="checkin">Tanggal Check-in : </label>
+            <input type="datetime-local" class="form-control" id="checkin"  name="checkin" placeholder="Check-in Dari">
         </div>
-        <button class="btn btn-default">Submit</button>
+        <div class="form-group">
+            <label for="checkin">Tanggal Check-out : </label>
+            <input type="datetime-local" class="form-control"  name="checkout"  id="checkout" placeholder="Check-in Dari">
+        </div>
+        <div class="form-group">
+            <label for="checkin">Total Harga : </label>
+            <input type="hidden" class="form-control" id="totalFix"  name="total" readonly>
+            <input type="text" class="form-control" id="total"  name="totalbak" readonly>
+        </div>
+        <div class="form-group">
+            <textarea class="form-control" name="pesan"  placeholder="Message" rows="4"></textarea>
+        </div>
+    @elseif(!session('guest'))
+        @if($action == 'regis')
+        <h3>Daftar</h3>
+        <form role="form" action="/homepage/registrasi" method="POST" class="wowload fadeInRight">
+            @csrf
+            <div class="form-group">
+                <input type="text" class="form-control" name="no_identitas"  placeholder="No Identitas">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control"  name='nama' placeholder="Nama">
+            </div>
+            <div class="form-group">
+                <input type="email" class="form-control"  name='email' placeholder="Email">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control"  name='username' placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control"  name='password' placeholder="Password">
+            </div>
+            <div class="form-group">
+                <input type="text" class="form-control"  name='telpon' placeholder="No.Telp">
+            </div>
+        @else
+        <h3>Login Untuk Memesan</h3>
+        <form role="form" action="/homepage/login" method="POST" class="wowload fadeInRight">
+            @csrf
+            <div class="form-group">
+                <input type="text" class="form-control" name="username"  placeholder="Username">
+            </div>
+            <div class="form-group">
+                <input type="password" class="form-control" name="pwd"  placeholder="Password">
+            </div>
+        @endif
+    @endif
+    <button class="btn btn-default">Submit</button>
+    @if(!session('guest') && $action != 'regis')
+    <a class="btn btn-success" href="/daftar-guest">Daftar</a>
+    @endif
     </form>    
 </div>
 </div>  
 </div>
 </div>
 <!-- reservation-information -->
-
 
 
 <!-- services -->
@@ -182,3 +183,104 @@
 
 
 @include('homepage.irna_footer')
+
+<script>
+    $('#tipe').change(function()
+    {
+        $('#nomor').html('<option value="0">Nomor</option>');
+        $('#nomor').val(0);
+        $.ajax({
+            type: 'GET',
+            url: '/homepage/getNomor/'+this.value,
+            success: function(res) {
+                
+                $(".overlay").removeClass('show')
+                if(res != null || res != undefined) {
+                    $.each(res,function(index,val) {
+                        $('#nomor').append('<option value="'+val.irna_nomor+'">'+val.irna_nomor+'</option>')
+                    })
+                    $("#editModal").modal('show');
+
+                    return;
+                }
+
+                alert("Terjadi kesalahan! Silahkan coba lagi", "error");
+
+                return;
+            },
+            error: function(jqXHR, textStatus, error) {
+                $(".overlay").removeClass('show')
+                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error");
+
+                return;
+            }
+        });
+    });
+
+    $('#nomor').change(function()
+    {
+        $('#kapasitas').val('Kapasitas');
+        $.ajax({
+            type: 'GET',
+            url: '/homepage/getKapasitas/'+this.value,
+            success: function(res) {
+                
+                $(".overlay").removeClass('show')
+                if(res != null || res != undefined) {
+                    $("#kapasitas").val(res.irna_maximal+' Orang');
+                    $("#editModal").modal('show');
+
+                    return;
+                }
+
+                alert("Terjadi kesalahan! Silahkan coba lagi", "error");
+
+                return;
+            },
+            error: function(jqXHR, textStatus, error) {
+                $(".overlay").removeClass('show')
+                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error");
+
+                return;
+            }
+        });
+    });
+
+    $('#checkin').on('change',function(){
+        let checkin = new Date(this.value)
+        let checkout = new Date($('#checkout').val())
+        var oneDay  = 24*60*60*1000
+        var diffDays = Math.abs((checkin.getTime() - checkout.getTime()) / oneDay)
+        var nomor = $('#nomor').val()
+        
+        $.ajax({
+            type: 'GET',
+            url: '/homepage/getHarga/'+nomor,
+            success: function(res) {
+                
+                $(".overlay").removeClass('show')
+                if(res != null || res != undefined) {
+                    let harga = res.irna_harga
+                    harga = harga*diffDays
+                    $('#total').val('Rp. '+harga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+                    $('#totalFix').val(harga);
+
+                    $("#editModal").modal('show');
+
+                    return;
+                }
+
+                alert("Terjadi kesalahan! Silahkan coba lagi", "error");
+
+                return;
+            },
+            error: function(jqXHR, textStatus, error) {
+                $(".overlay").removeClass('show')
+                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error");
+
+                return;
+            }
+        });
+    });
+    
+</script>

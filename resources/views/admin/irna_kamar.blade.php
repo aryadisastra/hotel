@@ -47,7 +47,7 @@
                                     <td>{{$dt->irna_status == 1 ? 'Kosong' : 'Diisi'}}</td>
                                     <td>
                                         <button  type="button" class="btn btn-info btn-sm form-modal" onclick="detailKamar('{{ $dt->id }}')"><i class="fa fa-file-text fa-fw"></i></button>
-                                        <button  type="button" class="btn btn-danger btn-sm form-modal" onclick="deleteUser('{{ $dt->id }}')"><i class="fa fa-trash fa-fw"></i></button>
+                                        <button  type="button" class="btn btn-danger btn-sm form-modal" onclick="deleteKamar('{{ $dt->id }}')"><i class="fa fa-trash fa-fw"></i></button>
                                     </td>
                                 </tr>
                             @endforeach
@@ -145,19 +145,19 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-edit" enctype="multipart/form-data" action="/kamar" method="PUT">
+                <form id="form-edit" enctype="multipart/form-data" action="/kamar/edit" method="POST">
                     @csrf
                     <div class="form-group row mb-2">
                         <label class="col-3 col-form-label">Nomor Kamar</label>
                         <div class="col-9">
-                            <input type="hidden" class="form-control" id="editId">
-                            <input type="text" class="form-control" id="editNomor">
+                            <input type="hidden" class="form-control" name="id" id="editId">
+                            <input type="text" class="form-control" name="nomor" id="editNomor">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
                         <label class="col-3 col-form-label">Lantai</label>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="editLantai">
+                            <input type="text" class="form-control" name="lantai" id="editLantai">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
@@ -228,10 +228,9 @@
                     $('#editHarga').val(res.detail.irna_harga)
                     $.each(res.fasilitas,function(key,data){
                         let result = res.detail.irna_fasilitas.includes(data.id) ? "checked" : ""
-                        console.log(result);
                         $('#container-fasilitas').append('<div class="form-check">'+
-                            '<input class="form-check-input" type="checkbox" name="fasilitas[]" value="'+data.irna_id+'" id="defaultCheck'+data.irna_id+'" '+result+'>'+
-                            '<label class="form-check-label" for="defaultCheck'+data.irna_id+'">'+
+                            '<input class="form-check-input" type="checkbox" name="fasilitas[]" value="'+data.id+'" id="defaultCheck'+data.id+'" '+result+'>'+
+                            '<label class="form-check-label" for="defaultCheck'+data.id+'">'+
                                 ''+data.irna_nama+
                             '</label>'+
                         '</div>')
@@ -261,8 +260,9 @@
         
     }
 
-    const deleteUser = (id) => {
-        $(".overlay").addClass('show')
+    const deleteKamar = (id) => {
+        if (confirm('Yakin Akan Hapus Data?')) {
+            $(".overlay").addClass('show')
         
         const data = {
             _token: "{{ csrf_token() }}",
@@ -294,6 +294,8 @@
                 return
             }
         })
+        }
+        
     }
 </script>
 @include('admin.irna_footer')

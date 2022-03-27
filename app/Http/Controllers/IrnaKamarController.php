@@ -68,13 +68,17 @@ class IrnaKamarController extends Controller
     public function update(Request $r)
     {
         if(!session('user')) return view('admin.login');
-        $update = IrnaKamar::where('id',$r->id)->update([
-            'irna_nama'         => $r->nama,
-            'irna_status'       => $r->status,
-            'updated_at'        => date('Y-m-d H:i:s'),
-        ]);
+        $update = IrnaKamar::where('id',$r->id)->first();
+        $update->irna_nomor           = $r->nomor;
+        $update->irna_lantai          = $r->lantai;
+        $update->irna_tipe            = $r->tipe;
+        $update->irna_maximal         = $r->kapasitas;
+        $update->irna_maximal         = $r->kapasitas;
+        $update->irna_harga           = $r->harga;
+        $update->irna_fasilitas       = implode(',',$r->fasilitas);
+        $update->save();
 
-        return response()->json($update == 1 ? True : False);
+        return redirect('/kamar');
     }
 
     public function delete(Request $r)

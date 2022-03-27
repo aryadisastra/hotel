@@ -85,6 +85,15 @@
                                 <div class="sb-nav-link-icon"><i class="fas fa-gear"></i></div>
                                 Data Fasilitas
                             </a>
+                            @else
+                            <a class="nav-link" href="/data-reservasi">
+                                <div class="sb-nav-link-icon"><i class="fas fa-gear"></i></div>
+                                Data Reservasi
+                            </a>
+                            <a class="nav-link" href="/data-tamu">
+                                <div class="sb-nav-link-icon"><i class="fas fa-user-group"></i></div>
+                                Data Tamu
+                            </a>
                             @endif
                         </div>
                     </div>

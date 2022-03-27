@@ -9,55 +9,55 @@
         <div class="row">
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-primary text-white mb-4">
-                    <div class="card-body">Data Masuk Hari Ini : <span id="total">0</span></div>
+                    <div class="card-body">Data Masuk Hari Ini : <span id="total_hari_ini">0</span></div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-warning text-white mb-4">
-                    <div class="card-body">Kamar Dipakai Hari Ini : <span id="menunggu">0</span></div>
+                    <div class="card-body">Kamar Dipakai Hari Ini : <span id="kamar_dipakai">0</span></div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-success text-white mb-4">
-                    <div class="card-body">Kamar Kosong Hari Ini : <span id="selesai">0</span></div>
+                    <div class="card-body">Kamar Kosong Hari Ini : <span id="kamar_kosong">0</span></div>
                 </div>
             </div>
             <div class="col-xl-3 col-md-6">
                 <div class="card bg-danger text-white mb-4">
-                    <div class="card-body">Data Keluar Hari Ini : <span id="belum">0</span></div>
+                    <div class="card-body">Data Keluar Hari Ini : <span id="keluar">0</span></div>
                 </div>
             </div>
         </div>
         <div class="card mb-4">
             <div class="card-header">
                 <i class="fas fa-table me-1"></i>
-                Data Reservasi
+                Daftar Reservasi
             </div>
             <div class="card-body">
-                <div class="table-responsive table table-striped table-hover">
-                    <table id="datatablesSimple">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="datatablesSimple">
                         <thead>
                             <tr>
-                                <th>Tanggal</th>
-                                <th>Pemesan</th>
-                                <th>Kode Reservasi</th>
-                                <th>Metode Reservasi</th>
-                                <th>Tipe - Nomor Kamar</th>
-                                <th>Status</th>
+                                <th>No ID</th>
+                                <th>Nama</th>
+                                <th>Kode</th>
+                                <th>Check-In</th>
+                                <th>Check-Out</th>
+                                <th>No Kamar</th>
+                                <th>Total</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach($fetch as $dt)
-                            {{-- <tr style="background-color:{{$dt['status_angka'] == 3 ? '#74f779' : ($dt['status_angka'] == 1 ? '#fc8d8d' : '#fffc69')}}">
-                                <td>{{$dt['pasien']}}</td>
-                                <td>{{$dt['umur']}}</td>
-                                <td>{{$dt['gender']}}</td>
-                                <td>{{$dt['hasil']}}</td>
-                                <td>{{$dt['status']}}</td>
-                                <td>{{$dt['perawat']}}</td>
-                                <td>{{$dt['tlm']}}</td>
-                                <td>{{$dt['dokter']}}</td>
-                            </tr> --}}
+                            @foreach ($dataSummary as $dt)
+                                <tr >
+                                    <td>{{$dt['identitas']}}</td>
+                                    <td>{{ucWords($dt['nama'])}}</td>
+                                    <td>{{$dt['kode']}}</td>
+                                    <td>{{$dt['checkin']}}</td>
+                                    <td>{{$dt['checkout']}}</td>
+                                    <td>{{$dt['no_kamar']}}</td>
+                                    <td>{{$dt['total']}}</td>
+                                </tr>
                             @endforeach
                         </tbody>
                     </table>
@@ -73,10 +73,10 @@
                 type: 'GET',
                 url: '/dashboard/getData',
                 success: function(res) {
-                    $('#total').html(res[0].total)
-                    $('#menunggu').html(res[0].menunggu)
-                    $('#selesai').html(res[0].selesai)
-                    $('#belum').html(res[0].belum)
+                    $('#total_hari_ini').html(res[0].total_hari_ini)
+                    $('#kamar_dipakai').html(res[0].kamar_dipakai)
+                    $('#kamar_kosong').html(res[0].kamar_kosong)
+                    $('#keluar').html(res[0].keluar)
                     return;
                 }
             });

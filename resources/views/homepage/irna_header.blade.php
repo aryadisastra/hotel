@@ -3,12 +3,13 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
-<title>Holiday Crown | Hotel Terbaik Di Cimahi</title>
+<title>Palm Hotel | Hotel Terbaik Di Bandung</title>
 
 <!-- Google fonts -->
 <link href='http://fonts.googleapis.com/css?family=Raleway:300,500,800|Old+Standard+TT' rel='stylesheet' type='text/css'>
 <link href='http://fonts.googleapis.com/css?family=Raleway:300,500,800' rel='stylesheet' type='text/css'>
 
+<link rel="icon" href="{{asset('images/logo.png')}}">
 <!-- font awesome -->
 <link href="//maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -36,8 +37,6 @@
 </head>
 
 <body id="home">
-
-
 <!-- top 
   <form class="navbar-form navbar-left newsletter" role="search">
         <div class="form-group">
@@ -65,11 +64,10 @@
     <div class="collapse navbar-collapse navbar-right" id="bs-example-navbar-collapse-1">
       
       <ul class="nav navbar-nav">        
-        <li><a href="index.php">Home </a></li>
-        <li><a href="rooms-tariff.php">Rooms & Tariff</a></li>        
-        <li><a href="introduction.php">Introduction</a></li>
-        <li><a href="gallery.php">Gallery</a></li>
-        <li><a href="contact.php">Contact</a></li>
+        <li><a>{{session('guest') != null ? ucWords(session('guest')['nama']) : 'Belum Login'}} </a></li>
+        @if(session('guest'))
+        <li><a href="/homepage/logout">Logout</a></li>
+        @endif
       </ul>
     </div><!-- Wnavbar-collapse -->
   </div><!-- container-fluid -->

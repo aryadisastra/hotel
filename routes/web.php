@@ -1,5 +1,10 @@
 <?php
 
+use App\Models\IrnaGuest;
+use App\Models\IrnaKamar;
+use App\Models\IrnaTipe;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,13 +19,101 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('homepage.irna_index');
+
+    if(!session('guest')) return view('homepage.irna_index')->with('error','N/A');
+    $dataNomor = [];
+    $tipe = IrnaTipe::where('status',1)->get();
+    foreach($tipe as $dt){
+        $nomor = IrnaKamar::where('irna_status',1)->where('irna_tipe',$dt->id)->get();
+        foreach($nomor as $dt){
+            $dataNomor[] = [
+                'nomor'=> $dt->irna_nomor,
+            ];
+        }
+    }   
+    return view('homepage.irna_index',compact('tipe','dataNomor'));
+});
+
+Route::post('/homepage/login', function(Request $r) {
+    DB::beginTransaction();
+    try{
+        $cekPassword = md5(sha1(md5($r->pwd)));
+        $cekUser  = IrnaGuest::where('irna_username',$r->username)
+                    ->where('irna_password',$cekPassword)
+                    ->first();
+
+        if(!$cekUser) return view('homepage.irna_index')->with('error','invalid');;
+
+        session(['guest' => [
+                'id'            => $cekUser->id,
+                'nama'          => $cekUser->irna_nama,
+                'username'      => $cekUser->irna_username,
+                'no_identitas'  => $cekUser->irna_no_identitas,
+                'email'         => $cekUser->irna_email,
+                'telpon'        => $cekUser->irna_telpon,
+            ]
+        ]);
+        return redirect('/');
+    } catch(Exception $e)
+    {
+        return view('homepage.irna_index');
+    }
+});
+
+Route::get('/homepage/getNomor/{id}',function($id){
+    $dataNomor = IrnaKamar::where('irna_tipe',$id)->where('irna_status',1)->get();
+    return response()->json($dataNomor);
+});
+Route::get('/homepage/getKapasitas/{id}',function($id){
+    $dataKapasitas = IrnaKamar::where('irna_nomor',$id)->first();
+    return response()->json($dataKapasitas);
+});
+Route::get('/homepage/getHarga/{nomor}',function($nomor){
+    $dataKapasitas = IrnaKamar::where('irna_nomor',$nomor)->where('irna_status',1)->first();
+    return response()->json($dataKapasitas);
+});
+Route::get('/daftar-guest',function(){
+    $action = 'regis';
+    return view('homepage.irna_index',compact('action'));
+});
+
+Route::post('/homepage/reservasi', 'IrnaReservasiController@booking');
+
+Route::get('/homepage/logout',function(Request $r){
+    
+    $r->session()->forget('guest');
+    return redirect('/');
+});
+
+Route::post('/homepage/registrasi', function(Request $r)
+{
+
+    $add = new IrnaGuest();
+    $add->irna_no_identitas     = $r->no_identitas;
+    $add->irna_nama             = $r->nama;
+    $add->irna_email            = $r->email;
+    $add->irna_username         = $r->username;
+    $add->irna_telpon           = $r->telpon;
+    $add->irna_password         = md5(sha1(md5($r->password)));
+    $add->save();
+
+    session(['guest' => [
+            'nama'          => $add->irna_nama,
+            'username'      => $add->irna_username,
+            'no_identitas'  => $add->irna_no_identitas,
+            'email'         => $add->irna_email,
+            'telpon'        => $add->irna_telpon,
+        ]
+    ]);
+    
+    return redirect('/');
 });
 
 Route::get('/logout', 'IrnaLoginController@logout');
 Route::get('/admin', 'IrnaLoginController@index');
 Route::get('/admin/login', 'IrnaLoginController@login');
 Route::get('/dashboard','IrnaLoginController@index');
+Route::get('/dashboard/getData','IrnaLoginController@getData');
 
 Route::get('/pengguna','IrnaPenggunaController@index');
 Route::post('/pengguna','IrnaPenggunaController@add');
@@ -49,5 +142,17 @@ Route::put('/tipe','IrnaTipeController@delete');
 Route::get('/kamar','IrnaKamarController@index');
 Route::post('/kamar','IrnaKamarController@add');
 Route::get('/kamar/{id}','IrnaKamarController@detail');
-Route::put('/kamar','IrnaKamarController@update');
+Route::post('/kamar/edit','IrnaKamarController@update');
 Route::put('/kamar','IrnaKamarController@delete');
+
+Route::get('/data-tamu','IrnaTamuController@index');
+Route::post('/data-tamu','IrnaTamuController@add');
+Route::get('/data-tamu/{id}','IrnaTamuController@detail');
+Route::post('/data-tamu/edit','IrnaTamuController@update');
+Route::put('/data-tamu','IrnaTamuController@delete');
+
+Route::get('/data-reservasi','IrnaReservasiController@index');
+Route::post('/data-reservasi','IrnaReservasiController@add');
+Route::get('/data-reservasi/{id}','IrnaReservasiController@detail');
+Route::post('/data-reservasi/edit','IrnaReservasiController@update');
+Route::put('/data-reservasi','IrnaReservasiController@delete');
