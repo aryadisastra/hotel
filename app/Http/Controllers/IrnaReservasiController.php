@@ -73,6 +73,7 @@ class IrnaReservasiController extends Controller
                 'no_kamar'   => $dt->irna_no_kamar,
                 'tipe'       => $Tipe->irna_nama,
                 'total'      => $dt->irna_total,
+                'status'      => $dt->irna_status,
             ];
         }
         return view('admin.irna_reservasi',compact('dataSummary','dataTamu','dataKamar','dataTipe'));
@@ -111,7 +112,34 @@ class IrnaReservasiController extends Controller
     public function delete(Request $r)
     {
         if(!session('user')) return view('admin.login');
-        $delete = IrnaReservasi::where('id',$r->id)->delete();
+        $delete = IrnaReservasi::where('id',$r->id)->update(['irna_status'   => 3]);
+        $kamar = IrnaKamar::where('irna_nomor',$delete->irna_no_kamar)->update(['irna_status' => 1]);
         return response()->json($delete);
+    }
+
+    public function update(Request $r) {
+        if(!session('user')) return view('admin.irna_login');
+        $update = IrnaReservasi::where('id',$r->id)->update([
+            'irna_status'       =>$r->status,
+            'updated_at'        => date('Y-m-d H:i:s'),
+        ]);
+        if($r->status == 2) $update = IrnaKamar::where('irna_nomor',$update->irna_no_kamar)->update(['irna_status' => 1]);
+        
+
+        return response()->json($update == 1 ? True : False);
+    }
+    public function detail($id) {
+        $all = [];
+        $data = IrnaReservasi::where('id',$id)->first();
+        $tamu = IrnaGuest::where('id',$data->irna_id_tamu)->first();
+        $all = [
+            'id'  => $data->id,
+            'nama'  => $tamu->irna_nama,
+            'kode'  => $data->irna_kode,
+            'checkin'  => $data->irna_checkin,
+            'checkout'  => $data->irna_checkout,
+            'status'  => $data->irna_status,
+        ];
+        return response()->json($all);
     }
 }

@@ -1,0 +1,8 @@
+Tahapan : 
+1. Extract Project di HTDOCS
+2. di cmd atau terminal vsc ketik "composer install"
+3. setelah itu ketik lagi "php artisan config:cache"
+4. setelah itu ketik lagi "php artisan route:cache"
+5. setelah itu ketik lagi "php artisan migrate"
+6. setelah itu ketik lagi "php artisan db:seed"
+7. ulang tahap 3-4

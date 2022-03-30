@@ -2,6 +2,7 @@
 
 use App\Models\IrnaGuest;
 use App\Models\IrnaKamar;
+use App\Models\IrnaReservasi;
 use App\Models\IrnaTipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -53,11 +54,24 @@ Route::post('/homepage/login', function(Request $r) {
                 'telpon'        => $cekUser->irna_telpon,
             ]
         ]);
-        return redirect('/');
+        return view('homepage.irna_confirmation');
     } catch(Exception $e)
     {
         return view('homepage.irna_index');
     }
+});
+
+Route::get('/reservasi', function() {
+    return redirect('/');
+});
+
+Route::get('/welcome', function() {
+    return view('homepage.irna_confirmation');
+});
+
+Route::get('/history', function () {
+    $dataHistory = IrnaReservasi::where('irna_id_tamu',session('guest')['id'])->get();
+    return view('homepage.irna_history',compact('dataHistory'));
 });
 
 Route::get('/homepage/getNomor/{id}',function($id){
@@ -154,5 +168,5 @@ Route::put('/data-tamu','IrnaTamuController@delete');
 Route::get('/data-reservasi','IrnaReservasiController@index');
 Route::post('/data-reservasi','IrnaReservasiController@add');
 Route::get('/data-reservasi/{id}','IrnaReservasiController@detail');
-Route::post('/data-reservasi/edit','IrnaReservasiController@update');
 Route::put('/data-reservasi','IrnaReservasiController@delete');
+Route::put('/data-reservasi/edit','IrnaReservasiController@update');

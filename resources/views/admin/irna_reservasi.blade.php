@@ -27,6 +27,7 @@
                                 <th>Check-Out</th>
                                 <th>No Kamar</th>
                                 <th>Total</th>
+                                <th>Status</th>
                                 <th>
                                     Aksi
                                 </th>
@@ -42,8 +43,12 @@
                                     <td>{{$dt['checkout']}}</td>
                                     <td>{{$dt['no_kamar']}}</td>
                                     <td>{{$dt['total']}}</td>
+                                    <td>{{$dt['status'] == 0 ? 'Belum Bayar' : ($dt['status'] == 1 ? 'Check-In' : ($dt['status'] == 2 ? 'Check-Out' : 'Dibatalkan'))}}</td>
                                     <td>
-                                        <button  type="button" class="btn btn-danger btn-sm form-modal" onclick="deleteUser('{{ $dt['id'] }}')"><i class="fa fa-trash fa-fw"></i></button>
+                                        @if ($dt['status'] != 3)
+                                            <button  type="button" class="btn btn-info btn-sm form-modal" onclick="detailUser('{{ $dt['id'] }}')"><i class="fa fa-pencil fa-fw"></i></button>
+                                            <button  type="button" class="btn btn-danger btn-sm form-modal" onclick="deleteUser('{{ $dt['id'] }}')"><i class="fa fa-times fa-fw"></i></button>
+                                        @endif
                                     </td>
                                 </tr>
                             @endforeach
@@ -131,6 +136,74 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
                 <button type="button" class="btn btn-primary" onclick="addUser()">Simpan</button>
+            </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><i class="fa fa-plus"></i> DETAIL DATA</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form id="form-Pengguna">
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Tamu</label>
+                        <div class="col-9">
+                            <input type="hidden" name="id" id="editId" class="form-control"readonly>
+                            <input type="text" name="nama" id="editNama" class="form-control"readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Kode</label>
+                        <div class="col-9">
+                            <input type="text" name="kode" id="editKode" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Check-In</label>
+                        <div class="col-9">
+                            <input type="text" name="checkin" id="editCheckin" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Checkout</label>
+                        <div class="col-9">
+                            <input type="text" id="editCheckout" name="checkout" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Checkout</label>
+                        <div class="col-9">
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="Status" id="editStatus0" value="0">
+                                <label class="form-check-label" for="editStatus0">
+                                    Belum Dibayar
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="Status" id="editStatus1" value="1">
+                                <label class="form-check-label" for="editStatus1">
+                                    Check-In
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="Status" id="editStatus2" value="2">
+                                <label class="form-check-label" for="editStatus2">
+                                    Check-Out
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Tutup</button>
+                <button type="button" class="btn btn-primary" onclick="editUser()">Simpan</button>
             </div>
             </div>
         </div>
@@ -306,7 +379,8 @@
     }
 
     const deleteUser = (id) => {
-        $(".overlay").addClass('show')
+        if (confirm('Data Reservasi Ini Akan Dibatalkan ? ')) {
+            $(".overlay").addClass('show')
         
         const data = {
             _token: "{{ csrf_token() }}",
@@ -316,6 +390,81 @@
         $.ajax({
             type: 'PUT',
             url: '/data-reservasi',
+            data: data,
+            success: (res) => {
+                $(".overlay").removeClass('show')
+
+                if(res == true) {
+                    location.reload()
+
+                    return
+                }
+                
+                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
+
+                return
+            },
+            error: (jqXHR, textStatus, error) => {
+                $(".overlay").removeClass('show')
+
+                alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
+
+                return
+            }
+        })
+        } else {
+            alert('Why did you press cancel? You should have confirmed');
+        }
+    }
+
+    const detailUser = (id) => {
+        $(".overlay").addClass('show')
+        $.ajax({
+            type: 'GET',
+            url: '/data-reservasi/'+id,
+            success: function(res) {
+                
+                $(".overlay").removeClass('show')
+                if(res != null || res != undefined) {
+                    console.table(res);
+                    $('#editId').val(res.id)
+                    $('#editKode').val(res.kode)
+                    $('#editNama').val(res.nama)
+                    $('#editCheckin').val(res.checkin)
+                    $('#editCheckout').val(res.checkout)
+                    if(res.status == 0) $('#editStatus0').prop('checked',true)
+                    if(res.status == 1) $('#editStatus1').prop('checked',true)
+                    if(res.status == 2) $('#editStatus2').prop('checked',true)
+                    $("#editModal").modal('show');
+
+                    return;
+                }
+
+                alert("Terjadi kesalahan! Silahkan coba lagi", "error");
+
+                return;
+            },
+            error: function(jqXHR, textStatus, error) {
+                $(".overlay").removeClass('show')
+                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error");
+
+                return;
+            }
+        });
+    }
+
+    const editUser = () => {
+        $(".overlay").addClass('show')
+        
+        const data = {
+            _token: "{{ csrf_token() }}",
+            id: $('#editId').val(),
+            status: $('#editStatus0').is(':checked') ? 0 : ($('#editStatus1').is(':checked') ? '1' : '2'),
+        }
+
+        $.ajax({
+            type: 'PUT',
+            url: '/data-reservasi/edit',
             data: data,
             success: (res) => {
                 $(".overlay").removeClass('show')
