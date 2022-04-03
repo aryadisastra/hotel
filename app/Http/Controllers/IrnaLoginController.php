@@ -34,7 +34,7 @@ class IrnaLoginController extends Controller
             foreach($dataReservasi as $dt) { 
                 $Tamu      = IrnaGuest::where('id',$dt->irna_id_tamu)->first(); 
                 $Kamar     = IrnaKamar::where('irna_nomor',$dt->irna_no_kamar)->first();
-                $Tipe      = IrnaTipe::where('id',$Kamar->irna_tipe)->first();
+                $Tipe      = IrnaTipe::where('id',$dt->irna_nama)->first();
 
                 $dataSummary[]  = [
                     'id'         => $dt->id,
@@ -45,7 +45,7 @@ class IrnaLoginController extends Controller
                     'checkin'    => $dt->irna_checkin,
                     'checkout'   => $dt->irna_checkout,
                     'no_kamar'   => $dt->irna_no_kamar,
-                    'tipe'       => $Tipe->irna_nama,
+                    'tipe'       => $dt->irna_tipe,
                     'total'      => $dt->irna_total,
                 ];
             }
@@ -59,7 +59,7 @@ class IrnaLoginController extends Controller
         $data1 = IrnaReservasi::select(DB::raw('COUNT(*) as total_hari_ini'))->where(DB::raw('DATE(created_at)'),'=',DB::raw('DATE(now())'))->first();
         $data2 = IrnaKamar::select(DB::raw('COUNT(*) as kamar_dipakai'))->where('irna_status',2)->first();
         $data3 = IrnaKamar::select(DB::raw('COUNT(*) as kamar_kosong'))->where('irna_status',1)->first();
-        $data4 = IrnaReservasi::select(DB::raw('COUNT(*) as keluar'))->where(DB::raw('DATE(irna_checkout)'),'=',DB::raw('DATE(now())'))->orWhere('irna_status',2)->first();
+        $data4 = IrnaReservasi::select(DB::raw('COUNT(*) as keluar'))->where(DB::raw('DATE(irna_checkout)'),'=',DB::raw('DATE(now())'))->first();
         $total_hari_ini = $data1->total_hari_ini;
         $kamar_dipakai = $data2->kamar_dipakai;
         $kamar_kosong = $data3->kamar_kosong;

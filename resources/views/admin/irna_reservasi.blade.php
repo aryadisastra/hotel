@@ -199,6 +199,7 @@
                             </div>
                         </div>
                     </div>
+                    
                 </form>
             </div>
             <div class="modal-footer">
@@ -287,7 +288,7 @@
                 if(res != null || res != undefined) {
                     let harga = res.irna_harga
                     harga = harga*diffDays
-                    $('#addTotal').val('Rp. '+harga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+                    $('#addTotal').val('Rp. ' +harga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1." ));
                     $('#totalFix').val(harga);
 
                     return;
@@ -321,7 +322,7 @@
                 if(res != null || res != undefined) {
                     let harga = res.irna_harga
                     harga = harga*diffDays
-                    $('#addTotal').val('Rp. '+harga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+                    $('#addTotal').val('Rp. '+harga.number_format().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
                     $('#totalFix').val(harga);
 
                     return;
@@ -407,7 +408,7 @@
             error: (jqXHR, textStatus, error) => {
                 $(".overlay").removeClass('show')
 
-                alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
+                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
 
                 return
             }
@@ -481,12 +482,12 @@
             },
             error: (jqXHR, textStatus, error) => {
                 $(".overlay").removeClass('show')
-
                 alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
 
                 return
             }
-        })
+        });
     }
+
 </script>
 @include('admin.irna_footer')

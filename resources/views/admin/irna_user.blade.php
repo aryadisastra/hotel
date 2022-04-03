@@ -285,12 +285,14 @@
     }
 
     const deleteUser = (id) => {
+        if (confirm('Yakin Akan Hapus Data?')) {
         $(".overlay").addClass('show')
         
         const data = {
             _token: "{{ csrf_token() }}",
             id: id,
         }
+    }
 
         $.ajax({
             type: 'PUT',

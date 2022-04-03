@@ -60,7 +60,7 @@ class IrnaReservasiController extends Controller
         foreach($dataReservasi as $dt) { 
             $Tamu      = IrnaGuest::where('id',$dt->irna_id_tamu)->first(); 
             $Kamar     = IrnaKamar::where('irna_nomor',$dt->irna_no_kamar)->first();
-            $Tipe      = IrnaTipe::where('id',$Kamar->irna_tipe)->first();
+            $Tipe      = IrnaTipe::where('id',$dt->irna_tipe)->first();
 
             $dataSummary[]  = [
                 'id'         => $dt->id,
@@ -71,7 +71,7 @@ class IrnaReservasiController extends Controller
                 'checkin'    => $dt->irna_checkin,
                 'checkout'   => $dt->irna_checkout,
                 'no_kamar'   => $dt->irna_no_kamar,
-                'tipe'       => $Tipe->irna_nama,
+                'tipe'       => $dt->irna_nama,
                 'total'      => $dt->irna_total,
                 'status'      => $dt->irna_status,
             ];

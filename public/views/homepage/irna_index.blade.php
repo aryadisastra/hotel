@@ -139,7 +139,7 @@
                 <a class="right carousel-control" href="#RoomCarousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>
             </div>
             <!-- RoomCarousel-->
-            <div class="caption">Rooms<a href="rooms-tariff.php" class="pull-right"><i class="fa fa-edit"></i></a></div>
+            <div class="caption">SUPERIOR<a href="rooms-tariff.php" class="pull-right"><i class=""></i></a></div>
         </div>
 
 
@@ -156,7 +156,7 @@
                 <a class="right carousel-control" href="#TourCarousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>
             </div>
             <!-- RoomCarousel-->
-            <div class="caption">Tour Packages<a href="gallery.php" class="pull-right"><i class="fa fa-edit"></i></a></div>
+            <div class="caption">DELUXE<a href="gallery.php" class="pull-right"><i class=""></i></a></div>
         </div>
 
 
@@ -173,7 +173,7 @@
                 <a class="right carousel-control" href="#FoodCarousel" role="button" data-slide="next"><i class="fa fa-angle-right"></i></a>
             </div>
             <!-- RoomCarousel-->
-            <div class="caption">Food and Drinks<a href="gallery.php" class="pull-right"><i class="fa fa-edit"></i></a></div>
+            <div class="caption">SIMPEL<a href="gallery.php" class="pull-right"><i class=""></i></a></div>
         </div>
     </div>
 </div>

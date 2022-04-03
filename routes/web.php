@@ -112,6 +112,7 @@ Route::post('/homepage/registrasi', function(Request $r)
     $add->save();
 
     session(['guest' => [
+            'id'          => $add->id,
             'nama'          => $add->irna_nama,
             'username'      => $add->irna_username,
             'no_identitas'  => $add->irna_no_identitas,
