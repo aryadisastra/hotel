@@ -31,7 +31,7 @@ class IrnaKamarController extends Controller
         $add->irna_maximal      = $r->kapasitas;
         $add->irna_harga        = $r->harga;
         $add->irna_status       = 1;
-        $add->irna_fasilitas    = implode($r->fasilitas);
+        $add->irna_fasilitas    = implode(',',$r->fasilitas);
         $files = $r->file('foto');
         if ($r->hasFile('foto')) {
             foreach ($files as $file) {
