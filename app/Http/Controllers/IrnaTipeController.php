@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\IrnaAttachment;
+use App\Models\IrnaKamar;
 use App\Models\IrnaTipe;
 use Illuminate\Http\Request;
 
@@ -19,15 +21,35 @@ class IrnaTipeController extends Controller
     public function add(Request $r)
     {
         if(!session('user')) return view('admin.login');
-            
-        $insert = IrnaTipe::insert([
-            'irna_nama'          => $r->nama,
-            'status'             => 1,
-            'created_at'         => date('Y-m-d H:i:s'),
-            'updated_at'         => date('Y-m-d H:i:s'),
-        ]);
+        $add = new IrnaTipe();
+        $add->irna_nama     = $r->nama; 
+        $add->status        = 1;
+        $add->save();
 
-        return response()->json($insert);
+        $files = $r->file('foto');
+        if ($r->hasFile('foto')) {
+            foreach ($files as $file) {
+                $filename = $file->getClientOriginalName();
+                $imageExt =  $file->getClientOriginalExtension();
+                $file_name_convert = IrnaAttachment::generateNameImages();
+                $images_true = $file_name_convert . '.' . $imageExt;
+                $custom_env = IrnaAttachment::moveImage($file, $images_true);
+                if ($custom_env !== false) {
+                    $addImg = new IrnaAttachment();
+                    $addImg->irna_id_tipe              = $add->id;
+                    $addImg->irna_file                 = $images_true;
+                    $addImg->save();
+                }
+            }
+        }
+        // $insert = IrnaTipe::insert([
+        //     'irna_nama'          => $r->nama,
+        //     'status'             => 1,
+        //     'created_at'         => date('Y-m-d H:i:s'),
+        //     'updated_at'         => date('Y-m-d H:i:s'),
+        // ]);
+
+        return redirect('/tipe');
     }
 
     public function detail($id)
@@ -56,6 +78,7 @@ class IrnaTipeController extends Controller
     {
         if(!session('user')) return view('admin.login');
         $delete = IrnaTipe::where('id',$r->id)->delete();
+        IrnaAttachment::where('irna_id_tipe',$r->id)->delete();
         return response()->json($delete);
     }
 }

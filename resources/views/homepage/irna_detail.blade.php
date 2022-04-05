@@ -1,10 +1,7 @@
 @include('homepage.irna_header')
-<div style="display: none">
-    {{isset($result) ? $result : $result = ''}}
-</div>
 <!-- banner -->
 <div class="banner">    	   
-    <img src="/images/photos/banner.jpg"  class="img-responsive" alt="slide">
+    <img src="{{asset('images/photos/banner.jpg')}}"  class="img-responsive" alt="slide">
     <div class="welcome-message">
         <div class="wrap-info">
             <div class="information" style="opacity: 0.6">
@@ -23,20 +20,42 @@
 <div class="container">
 <div class="row">
 <div class="col-sm-7 col-md-8">
-    <div class="embed-responsive embed-responsive-16by9 wowload fadeInLeft"><img  class="embed-responsive-item" src="/images/photos/kolam.jpg" width="50" height="50" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></img></div>
-</div>
-<div class="col-sm-5 col-md-4">
-    @if ($result != 'success')
-        <h3>Selamat Datang, {{ucWords(session('guest')['nama'])}}</h3>
-        <a class="btn btn-info" href="/history">History Reservasi</a>    
-        <a class="btn btn-success" href="/reservasi">Reservasi</a>    
-    @else
-        <h3>Selamat Datang, {{ucWords(session('guest')['nama'])}}</h3>
-        <p>Reservasi Anda Telah Berhasil! </p>
-        <a class="btn btn-info" href="/download-struk">Download Struk</a>    
-        <a class="btn btn-success" href="/welcome">Kembali</a>  
-    @endif
-
+    <div class="embed-responsive embed-responsive-16by9 wowload fadeInLeft">
+        <h3>{{ucWords($getData->irna_nama)}}</h3>
+        <div class="col-sm-7">
+            <table class="table table-dark">
+                <thead>
+                    <tr>
+                        <td>Keterangan</td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Tipe Kamar</td>
+                        <td><b>:</b></td>
+                        <td>{{$getData->irna_nama}}</td>
+                    </tr>
+                    <tr>
+                        <td>Jumlah Kamar Tersedia</td>
+                        <td><b>:</b></td>
+                        <td>{{count($getDataKamar)}}</td>
+                    </tr>
+                    <tr>
+                        <td>Nomor Kamar Tersedia</td>
+                        <td><b>:</b></td>
+                        @php
+                            foreach ($getDataKamar as $dt => $key) {
+                                $kamar[] = $key->irna_nomor;
+                            }
+                        @endphp
+                        <td>{{isset($kamar) ? implode(' , ',$kamar) : '-'}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 </div>  
 </div>
@@ -46,30 +65,22 @@
 
 <!-- services -->
 <div class="spacer services wowload fadeInUp">
-    <div class="container">
-        <div class="row">
-            @php
-                $tipe = \App\Models\IrnaTipe::where('status',1)->get();
-            @endphp
-            @foreach($tipe as $dt)
-            <div class="col-sm-4">
-                <!-- RoomCarousel -->
-                <div id="RoomCarousel" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner">
-                        @php
-                            $img = \App\Models\IrnaAttachment::where('irna_id_tipe',$dt->id)->get();
-                        @endphp
-                        @foreach($img as $di => $key)               
-                            <div class="item  {{$di == 0 ? 'active' : 'height-full'}}"><img src="{{asset('/asset_admin/img/tipe/'.$key->irna_file)}}"  class="img-responsive" alt="slide"></div>
-                        @endforeach
-                    </div>
+<div class="container">
+    <div class="row">
+        @foreach($getDataKamar as $dt)
+        <div class="col-sm-4">
+            <!-- RoomCarousel -->
+            <div id="RoomCarousel" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">             
+                    <div class="item  active"><img src="{{asset('/asset_admin/img/kamar/'.$dt->irna_foto)}}"  class="img-responsive" alt="slide"></div>
                 </div>
-                <!-- RoomCarousel-->
-                <div class="caption"><a href="/homepage/tipe/{{$dt->irna_nama}}" class="pull-right">{{ucWords($dt->irna_nama)}}</a></div>
             </div>
-            @endforeach
+            <!-- RoomCarousel-->
+            <div class="caption"><a href="/homepage/kamar/{{$dt->id}}" class="pull-right">{{ucWords('Kamar Nomor '.$dt->irna_nomor)}}</a></div>
         </div>
+        @endforeach
     </div>
+</div>
 </div>
 <!-- services -->
 
@@ -77,6 +88,15 @@
 @include('homepage.irna_footer')
 
 <script>
+
+    $('#jumlah_tamu').on('input',function(){
+        if(parseInt(this.value) > parseInt($('#kapasitas').val())) {
+            $('#submit-reserv').prop('disabled',true)
+        } else {
+            $('#submit-reserv').prop('disabled',false)
+        }
+    })
+
     $('#tipe').change(function()
     {
         $('#nomor').html('<option value="0">Nomor</option>');
@@ -111,7 +131,7 @@
 
     $('#nomor').change(function()
     {
-        $('#kapasitas').val('Kapasitas');
+        $('#kapasitas').val('Maksimal');
         $.ajax({
             type: 'GET',
             url: '/homepage/getKapasitas/'+this.value,
@@ -119,7 +139,7 @@
                 
                 $(".overlay").removeClass('show')
                 if(res != null || res != undefined) {
-                    $("#kapasitas").val(res.irna_maximal+' Orang');
+                    $("#kapasitas").val(res.irna_maximal);
                     $("#editModal").modal('show');
 
                     return;

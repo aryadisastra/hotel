@@ -57,11 +57,18 @@
                 </button>
             </div>
             <div class="modal-body">
-                <form id="form-tipe">
+                <form id="add-form" action="/tipe" method="POST" enctype="multipart/form-data">
+                    @csrf
                     <div class="form-group row mb-2">
                         <label class="col-3 col-form-label">Nama Tipe</label>
                         <div class="col-9">
-                            <input type="text" class="form-control" id="addNama">
+                            <input type="text" class="form-control" id="addNama" name="nama">
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Foto Homepage</label>
+                        <div class="col-9">
+                            <input type="file" class="form-control" name="foto[]" multiple accept="image/*">
                         </div>
                     </div>
                 </form>
@@ -119,37 +126,37 @@
 
 <script>
     const addUser = () => {
-        
-        $(".overlay").addClass('show')
-        const data = {
-            _token: "{{ csrf_token() }}",
-            nama: $('#addNama').val(),
-        }
+        $('#add-form').submit()
+        // $(".overlay").addClass('show')
+        // const data = {
+        //     _token: "{{ csrf_token() }}",
+        //     nama: $('#addNama').val(),
+        // }
                
-        $.ajax({
-            type: 'POST',
-            url: '/tipe',
-            data: data,
-            success: function(res) {
-                if(res == true) {
-                    $(".overlay").removeClass('show')
-                    location.reload();
+        // $.ajax({
+        //     type: 'POST',
+        //     url: '/tipe',
+        //     data: data,
+        //     success: function(res) {
+        //         if(res == true) {
+        //             $(".overlay").removeClass('show')
+        //             location.reload();
 
-                    return;
-                }
+        //             return;
+        //         }
 
-                alert("Terjadi kesalahan! Silahkan coba lagi", "error");
+        //         alert("Terjadi kesalahan! Silahkan coba lagi", "error");
 
-                return;
-            },
-            error: function(jqXHR, textStatus, error) {
-                $(".overlay").removeClass('show');
+        //         return;
+        //     },
+        //     error: function(jqXHR, textStatus, error) {
+        //         $(".overlay").removeClass('show');
 
-                alert("Data kurang lengkap! Silahkan coba lagi", "error");
+        //         alert("Data kurang lengkap! Silahkan coba lagi", "error");
 
-                return;
-            }
-        })
+        //         return;
+        //     }
+        // })
     }
 
     
@@ -223,39 +230,40 @@
 
     const deleteUser = (id) => {
         if (confirm('Yakin Akan Hapus Data?')) {
-        $(".overlay").addClass('show')
+            $(".overlay").addClass('show')
+            
+            const data = {
+                _token: "{{ csrf_token() }}",
+                id: id,
+            }
         
-        const data = {
-            _token: "{{ csrf_token() }}",
-            id: id,
-        }
-    }
 
-        $.ajax({
-            type: 'PUT',
-            url: '/tipe',
-            data: data,
-            success: (res) => {
-                $(".overlay").removeClass('show')
+            $.ajax({
+                type: 'PUT',
+                url: '/tipe',
+                data: data,
+                success: (res) => {
+                    $(".overlay").removeClass('show')
 
-                if(res == true) {
-                    location.reload()
+                    if(res == true) {
+                        location.reload()
+
+                        return
+                    }
+                    
+                    alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
+
+                    return
+                },
+                error: (jqXHR, textStatus, error) => {
+                    $(".overlay").removeClass('show')
+
+                    alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
 
                     return
                 }
-                
-                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
-
-                return
-            },
-            error: (jqXHR, textStatus, error) => {
-                $(".overlay").removeClass('show')
-
-                alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
-
-                return
-            }
-        })
+            })
+        }
     }
 </script>
 @include('admin.irna_footer')

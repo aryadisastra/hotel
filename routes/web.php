@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\IrnaAttachment;
 use App\Models\IrnaGuest;
 use App\Models\IrnaKamar;
 use App\Models\IrnaReservasi;
@@ -7,6 +8,7 @@ use App\Models\IrnaStruk;
 use App\Models\IrnaTipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -85,14 +87,17 @@ Route::get('/homepage/getNomor/{id}',function($id){
     $dataNomor = IrnaKamar::where('irna_tipe',$id)->where('irna_status',1)->get();
     return response()->json($dataNomor);
 });
+
 Route::get('/homepage/getKapasitas/{id}',function($id){
     $dataKapasitas = IrnaKamar::where('irna_nomor',$id)->first();
     return response()->json($dataKapasitas);
 });
+
 Route::get('/homepage/getHarga/{nomor}',function($nomor){
     $dataKapasitas = IrnaKamar::where('irna_nomor',$nomor)->where('irna_status',1)->first();
     return response()->json($dataKapasitas);
 });
+
 Route::get('/daftar-guest',function(){
     $action = 'regis';
     return view('homepage.irna_index',compact('action'));
@@ -130,6 +135,11 @@ Route::post('/homepage/registrasi', function(Request $r)
     
     return redirect('/');
 });
+
+Route::get('/homepage/tipe/{id}', 'IrnaHomepageController@tipeDetail');
+Route::get('/homepage/kamar/{id}', 'IrnaHomepageController@kamarDetail');
+Route::get('/homepage/reservasi/{id}','IrnaHomepageController@reservasi');
+Route::post('/homepage/reservasi-kamar','IrnaHomepageController@booking');
 
 Route::get('/logout', 'IrnaLoginController@logout');
 Route::get('/admin', 'IrnaLoginController@index');

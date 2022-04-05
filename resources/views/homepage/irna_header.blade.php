@@ -57,7 +57,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="index.php"><img src="images/logo.png"  alt="holiday crown"></a>
+      <a class="navbar-brand" href="index.php"><img src="{{asset('images/logo.png')}}"  alt="holiday crown"></a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->

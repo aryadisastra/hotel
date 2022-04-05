@@ -31,12 +31,12 @@
 
             <td>{{$jumlah_tamu}}</td>
             
-            <td>{{"Rp. "number_format($total)}}</td>
+            <td>{{"Rp. ".number_format($total)}}</td>
         </tr>
     </table>
 
     <h4 class="m-0 font-weight-bold text-primary" align="right">Bandung, <?php echo date('d - m - Y'); ?></h4> 
-                            <h4 class="m-0 font-weight-bold text-primary" align="right">Tamu,</h4>
+                            <h4 class="m-0 font-weight-bold text-primary" align="right">{{ucWords(session('guest')['nama'])}},</h4>
     
 </body>
 </html>
