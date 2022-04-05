@@ -15,6 +15,7 @@
             <td>Check-In</td>
             <td>Check-Out</td>
             <td>No Kamar</td>
+            <td>Jumlah Tamu</td>
             <td>Total</td>
         </tr>
         <tr>
@@ -27,8 +28,10 @@
             <td>{{$checkout}}</td>
             
             <td>{{$no_kamar}}</td>
+
+            <td>{{$jumlah_tamu}}</td>
             
-            <td>{{$total}}</td>
+            <td>{{"Rp. "number_format($total)}}</td>
         </tr>
     </table>
 

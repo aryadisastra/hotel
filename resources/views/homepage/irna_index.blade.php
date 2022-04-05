@@ -44,7 +44,7 @@
                     <select class="form-control col-sm-2" name="tipe" id="tipe">
                         <option>Tipe</option>
                         @foreach ($tipe as $dt)
-                          <option value="{{$dt->id}}">{{$dt->irna_nama}}</option>  
+                        <option value="{{$dt->id}}">{{$dt->irna_nama}}</option>  
                         @endforeach
                     </select>
                 </div>
@@ -55,10 +55,14 @@
                     </select>
                 </div>
                 <div class="col-xs-4">
-                    <label for="kapasitas">Kapasitas : </label>
-                    <input type="text" class="form-control" name="kapasitas" id="kapasitas"  value="Kapasitas :" readonly>
+                    <label for="kapasitas">Maksimal : </label>
+                    <input type="text" class="form-control" name="" id="kapasitas"  value="Maksimal :" readonly>
                 </div>
             </div>
+        </div>
+        <div class="form-group">
+            <label for="jumlah_tamu">Jumlah Orang</label>
+            <input type="number" class="form-control"  value="" name="jumlah_tamu" id="jumlah_tamu">
         </div>
         <div class="form-group">
             <label for="checkin">Tanggal Check-in : </label>
@@ -111,7 +115,7 @@
             </div>
         @endif
     @endif
-    <button class="btn btn-default">Submit</button>
+    <button class="btn btn-default" id="submit-reserv">Submit</button>
     @if(!session('guest') && $action != 'regis')
     <a class="btn btn-success" href="/daftar-guest">Daftar</a>
     @endif
@@ -185,6 +189,15 @@
 @include('homepage.irna_footer')
 
 <script>
+
+    $('#jumlah_tamu').on('input',function(){
+        if(parseInt(this.value) > parseInt($('#kapasitas').val())) {
+            $('#submit-reserv').prop('disabled',true)
+        } else {
+            $('#submit-reserv').prop('disabled',false)
+        }
+    })
+
     $('#tipe').change(function()
     {
         $('#nomor').html('<option value="0">Nomor</option>');
@@ -219,7 +232,7 @@
 
     $('#nomor').change(function()
     {
-        $('#kapasitas').val('Kapasitas');
+        $('#kapasitas').val('Maksimal');
         $.ajax({
             type: 'GET',
             url: '/homepage/getKapasitas/'+this.value,
@@ -227,7 +240,7 @@
                 
                 $(".overlay").removeClass('show')
                 if(res != null || res != undefined) {
-                    $("#kapasitas").val(res.irna_maximal+' Orang');
+                    $("#kapasitas").val(res.irna_maximal);
                     $("#editModal").modal('show');
 
                     return;

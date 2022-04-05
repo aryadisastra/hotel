@@ -42,7 +42,7 @@
                                         $tipe = App\Models\IrnaTipe::where('id',$dt->irna_tipe)->first();
                                     @endphp
                                     <td>{{$tipe->irna_nama}}</td>
-                                    <td>{{$dt->irna_harga}}</td>
+                                    <td>{{"Rp. ".number_format($dt->irna_harga)}}</td>
                                     <td>{{$dt->irna_maximal}} Orang</td>
                                     <td>{{$dt->irna_status == 1 ? 'Kosong' : 'Diisi'}}</td>
                                     <td>

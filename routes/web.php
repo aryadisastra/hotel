@@ -3,6 +3,7 @@
 use App\Models\IrnaGuest;
 use App\Models\IrnaKamar;
 use App\Models\IrnaReservasi;
+use App\Models\IrnaStruk;
 use App\Models\IrnaTipe;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -67,6 +68,12 @@ Route::get('/reservasi', function() {
 
 Route::get('/welcome', function() {
     return view('homepage.irna_confirmation');
+});
+
+Route::get('/download-struk',function() {
+    $struk = IrnaStruk::where('irna_id_tamu',session('guest')['id'])->orderBy('id','DESC')->first();
+    $filepath = public_path().'/struk/'.$struk->irna_kode_reservasi.'.pdf';
+    return Response()->download($filepath);
 });
 
 Route::get('/history', function () {

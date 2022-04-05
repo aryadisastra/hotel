@@ -5,8 +5,10 @@ namespace App\Http\Controllers;
 use App\Models\IrnaGuest;
 use App\Models\IrnaKamar;
 use App\Models\IrnaReservasi;
+use App\Models\IrnaStruk;
 use App\Models\IrnaTipe;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 use PDF;
 
 class IrnaReservasiController extends Controller
@@ -26,6 +28,7 @@ class IrnaReservasiController extends Controller
         $add->irna_checkout = $r->checkout;
         $add->irna_pesan    = $r->pesan;
         $add->irna_no_kamar = $r->nomor;
+        $add->jumlah_tamu   = $r->jumlah_tamu;
         $add->irna_total    = $r->total;
         $add->save();
 
@@ -41,11 +44,18 @@ class IrnaReservasiController extends Controller
             'checkin'   => date('d - M - Y',strtotime($add->irna_checkin)),
             'checkout'   => date('d - M - Y',strtotime($add->irna_checkout)),
             'no_kamar'   => $add->irna_no_kamar,
+            'jumlah_tamu' => $add->jumlah_tamu,
             'total'      => $add->irna_total,
         ];
         $pdf = PDF::loadView('irna_struk', $dataPdf);
-        
-        return $pdf->download('Struk Reservasi'.$add->irna_kode.'.pdf');
+        file_put_contents(public_path().'/struk/'.$add->irna_kode.'.pdf', $pdf->output() );
+        $struk = new IrnaStruk();
+        $struk->irna_id_tamu           = session('guest')['id'];
+        $struk->irna_kode_reservasi    = $add->irna_kode;
+        $struk->irna_struk             = $add->irna_kode.'.pdf';
+        $struk->save();
+        $result = 'success';
+        return view('homepage.irna_confirmation',compact('result'));
     }
 
     public function index(Request $r)
@@ -119,11 +129,12 @@ class IrnaReservasiController extends Controller
 
     public function update(Request $r) {
         if(!session('user')) return view('admin.irna_login');
+        $getData = IrnaReservasi::where('id',$r->id)->first();
         $update = IrnaReservasi::where('id',$r->id)->update([
             'irna_status'       =>$r->status,
             'updated_at'        => date('Y-m-d H:i:s'),
         ]);
-        if($r->status == 2) $update = IrnaKamar::where('irna_nomor',$update->irna_no_kamar)->update(['irna_status' => 1]);
+        if($r->status == 2) $update = IrnaKamar::where('irna_nomor',$getData->irna_no_kamar)->update(['irna_status' => 1]);
         
 
         return response()->json($update == 1 ? True : False);

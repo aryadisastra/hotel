@@ -56,7 +56,7 @@
                                     <td>{{$dt['checkin']}}</td>
                                     <td>{{$dt['checkout']}}</td>
                                     <td>{{$dt['no_kamar']}}</td>
-                                    <td>{{number_format( $dt['total'])}}</td>
+                                    <td>{{"Rp. ".number_format( $dt['total'])}}</td>
                                 </tr>
                             @endforeach
                         </tbody>

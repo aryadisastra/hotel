@@ -42,10 +42,10 @@
                                     <td>{{$dt['checkin']}}</td>
                                     <td>{{$dt['checkout']}}</td>
                                     <td>{{$dt['no_kamar']}}</td>
-                                    <td>{{$dt['total']}}</td>
+                                    <td>{{"Rp " . number_format($dt['total'],0,',','.')}}</td>
                                     <td>{{$dt['status'] == 0 ? 'Belum Bayar' : ($dt['status'] == 1 ? 'Check-In' : ($dt['status'] == 2 ? 'Check-Out' : 'Dibatalkan'))}}</td>
                                     <td>
-                                        @if ($dt['status'] != 3)
+                                        @if ($dt['status'] == 0 || $dt['status'] == 1)
                                             <button  type="button" class="btn btn-info btn-sm form-modal" onclick="detailUser('{{ $dt['id'] }}')"><i class="fa fa-pencil fa-fw"></i></button>
                                             <button  type="button" class="btn btn-danger btn-sm form-modal" onclick="deleteUser('{{ $dt['id'] }}')"><i class="fa fa-times fa-fw"></i></button>
                                         @endif

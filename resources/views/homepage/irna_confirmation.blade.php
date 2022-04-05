@@ -1,4 +1,7 @@
 @include('homepage.irna_header')
+<div style="display: none">
+    {{isset($result) ? $result : $result = ''}}
+</div>
 <!-- banner -->
 <div class="banner">    	   
     <img src="/images/photos/banner.jpg"  class="img-responsive" alt="slide">
@@ -23,9 +26,17 @@
     <div class="embed-responsive embed-responsive-16by9 wowload fadeInLeft"><img  class="embed-responsive-item" src="/images/photos/kolam.jpg" width="50" height="50" frameborder="0" webkitallowfullscreen mozallowfullscreen allowfullscreen></img></div>
 </div>
 <div class="col-sm-5 col-md-4">
-    <h3>Selamat Datang, {{ucWords(session('guest')['nama'])}}</h3>
-    <a class="btn btn-info" href="/history">History Reservasi</a>    
-    <a class="btn btn-success" href="/reservasi">Reservasi</a>    
+    @if ($result != 'success')
+        <h3>Selamat Datang, {{ucWords(session('guest')['nama'])}}</h3>
+        <a class="btn btn-info" href="/history">History Reservasi</a>    
+        <a class="btn btn-success" href="/reservasi">Reservasi</a>    
+    @else
+        <h3>Selamat Datang, {{ucWords(session('guest')['nama'])}}</h3>
+        <p>Reservasi Anda Telah Berhasil! </p>
+        <a class="btn btn-info" href="/download-struk">Download Struk</a>    
+        <a class="btn btn-success" href="/welcome">Kembali</a>  
+    @endif
+
 </div>
 </div>  
 </div>
