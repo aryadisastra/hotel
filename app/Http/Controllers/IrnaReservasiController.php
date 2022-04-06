@@ -107,6 +107,7 @@ class IrnaReservasiController extends Controller
         $add->irna_checkout = $r->checkout;
         $add->irna_pesan    = $r->pesan;
         $add->irna_no_kamar = $r->nomor;
+        $add->jumlah_tamu = $r->jumlah;
         $add->irna_total    = $r->total;
         $add->save();
 

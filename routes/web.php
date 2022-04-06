@@ -188,3 +188,5 @@ Route::post('/data-reservasi','IrnaReservasiController@add');
 Route::get('/data-reservasi/{id}','IrnaReservasiController@detail');
 Route::put('/data-reservasi','IrnaReservasiController@delete');
 Route::put('/data-reservasi/edit','IrnaReservasiController@update');
+
+Route::get('/print-report','IrnaReportController@print');

@@ -8,6 +8,7 @@
         <div class="row mb-4">
             <div class="col-xl-3 col-md-6">
             <button type="button" class="btn btn-primary text-white" data-bs-toggle="modal" data-bs-target="#addModal">Tambah Data</button>
+            <a href="/print-report" class="btn btn-warning text-black"><i class="fa fa-file"></i> Laporan </a>
             </div>
         </div>
         <div class="card mb-4">
@@ -104,6 +105,12 @@
                         <label class="col-3 col-form-label">Kapasitas</label>
                         <div class="col-9">
                             <input type="text" id="addKapasitas" class="form-control" readonly>
+                        </div>
+                    </div>
+                    <div class="form-group row mb-2">
+                        <label class="col-3 col-form-label">Jumlah_tamu</label>
+                        <div class="col-9">
+                            <input type="text" id="addJumlah" class="form-control">
                         </div>
                     </div>
                     <div class="form-group row mb-2">
@@ -213,7 +220,6 @@
 </main>
 
 <script>
-
     $('#addTipe').change(function() {
         $('#addNomor').html('<option value="0">Nomor</option>');
         $('#addNomor').val(0);
@@ -351,6 +357,7 @@
             pesan   : $('#addPesan').val(),
             nomor   :$('#addNomor').val(),
             total   :$('#totalFix').val(),
+            jumlah   :$('#addJumlah').val(),
         }
                
         $.ajax({
