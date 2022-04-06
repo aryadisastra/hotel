@@ -163,7 +163,7 @@ Route::get('/fasilitas','IrnaFasilitasController@index');
 Route::post('/fasilitas','IrnaFasilitasController@add');
 Route::get('/fasilitas/{id}','IrnaFasilitasController@detail');
 Route::put('/fasilitas','IrnaFasilitasController@update');
-Route::put('/fasilitas','IrnaFasilitasController@delete');
+Route::put('/fasilitas/delete','IrnaFasilitasController@delete');
 
 Route::get('/tipe','IrnaTipeController@index');
 Route::post('/tipe','IrnaTipeController@add');

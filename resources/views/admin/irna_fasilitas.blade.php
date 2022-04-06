@@ -223,39 +223,40 @@
 
     const deleteUser = (id) => {
         if (confirm('Yakin Akan Hapus Data?')) {
-        $(".overlay").addClass('show')
+            $(".overlay").addClass('show')
+            
+            const data = {
+                _token: "{{ csrf_token() }}",
+                id: id,
+            }
         
-        const data = {
-            _token: "{{ csrf_token() }}",
-            id: id,
-        }
-    }
 
-        $.ajax({
-            type: 'PUT',
-            url: '/fasilitas',
-            data: data,
-            success: (res) => {
-                $(".overlay").removeClass('show')
+            $.ajax({
+                type: 'PUT',
+                url: '/fasilitas/delete',
+                data: data,
+                success: (res) => {
+                    $(".overlay").removeClass('show')
 
-                if(res == true) {
-                    location.reload()
+                    if(res == true) {
+                        location.reload()
+
+                        return
+                    }
+                    
+                    alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
+
+                    return
+                },
+                error: (jqXHR, textStatus, error) => {
+                    $(".overlay").removeClass('show')
+
+                    alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
 
                     return
                 }
-                
-                alert("Terjadi kesalahan internal! Silahkan coba lagi", "error")
-
-                return
-            },
-            error: (jqXHR, textStatus, error) => {
-                $(".overlay").removeClass('show')
-
-                alert("Terjadi kesalahan indternal! Silahkan coba lagi", "error")
-
-                return
-            }
-        })
+            })
+        }
     }
 
 
