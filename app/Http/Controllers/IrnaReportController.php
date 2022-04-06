@@ -8,6 +8,7 @@ use App\Models\IrnaReservasi;
 use App\Models\IrnaTipe;
 use Illuminate\Http\Request;
 use Codedge\Fpdf\Fpdf\Fpdf;
+use Illuminate\Support\Facades\DB;
 
 class IrnaReportController extends FPDF
 {
@@ -50,7 +51,7 @@ class IrnaReportController extends FPDF
         $dataTamu = IrnaGuest::all();
         $dataKamar = IrnaKamar::where('irna_status',1)->get();
         $dataTipe = IrnaTipe::all();
-
+        $sum = IrnaReservasi::select(DB::raw('sum(irna_total) as total_sum'))->first();
         foreach($dataReservasi as $dt) { 
             $Tamu      = IrnaGuest::where('id',$dt->irna_id_tamu)->first(); 
             $Kamar     = IrnaKamar::where('irna_nomor',$dt->irna_no_kamar)->first();
@@ -105,6 +106,9 @@ class IrnaReportController extends FPDF
             $this->fpdf->Cell(16,6,$dt['status'] == 0 ? 'Belum Bayar' : ($dt['status'] == 1 ? 'Check-In' : ($dt['status'] == 2 ? 'Check-Out' : 'Dibatalkan')),1,0,'C',false);
             $this->fpdf->ln();
         }
+        $this->fpdf->SetFillColor(89, 255, 28);
+        $this->fpdf->Cell(96,6,'Total',1,0,'C',true);
+        $this->fpdf->Cell(32,6,'Rp. '.number_format($sum->total_sum),1,0,'C',false);
         
         $this->fpdf->Output('Laporan-Reservasi.pdf','I');
 
